@@ -55,47 +55,55 @@ class Client:
 		# self.setup["text"] = "Setup"
 		# self.setup["command"] = self.setupMovie
 		# self.setup.grid(row=1, column=0, padx=2, pady=2)
+		self.master.geometry("680x520")
+		self.iplay = PhotoImage(file="./image/play.png").zoom(3).subsample(51)
+		self.ipause = PhotoImage(file="./image/pause.png").zoom(3).subsample(51)
+		self.istop = PhotoImage(file="./image/stop-button.png").zoom(3).subsample(51)
+		self.ifor = PhotoImage(file="./image/fast-forward.png").zoom(3).subsample(51)
+		self.iback = PhotoImage(file="./image/rewind.png").zoom(3).subsample(51)
+		self.ides = PhotoImage(file="./image/search.png").zoom(3).subsample(51)
+
 		
 		# Create Play button		
-		self.start = Button(self.master, width=13, padx=3, pady=3)
+		self.start = Button(self.master, padx=3, pady=3, width=100, image=self.iplay)
 		self.start["text"] = "Play"
 		self.start["command"] = self.playMovie
-		self.start.grid(row=1, column=0, padx=2, pady=2)
+		self.start.grid(row=1, column=0, padx=2, pady=2, sticky=W+E+N+S)
 		
 		# Create Pause button			
-		self.pause = Button(self.master, width=13, padx=3, pady=3)
-		self.pause["text"] = "Pause"
+		self.pause = Button(self.master, padx=3, pady=3, width=100, image=self.ipause)
+		# self.pause["text"] = "Pause"
 		self.pause["command"] = self.pauseMovie
-		self.pause.grid(row=1, column=1, padx=2, pady=2)
+		self.pause.grid(row=1, column=1, padx=2, pady=2, sticky=W+E+N+S)
 		
 		# Create Teardown button
-		self.teardown = Button(self.master, width=13, padx=3, pady=3)
-		self.teardown["text"] = "Teardown"
+		self.teardown = Button(self.master, padx=3, pady=3, width=100, image=self.istop)
+		# self.teardown["text"] = "Teardown"
 		self.teardown["command"] =  self.exitClient
-		self.teardown.grid(row=1, column=2, padx=2, pady=2)
+		self.teardown.grid(row=1, column=2, padx=2, pady=2, sticky=W+E+N+S)
 
-		self.describe = Button(self.master, width=13, padx=3, pady=3)
-		self.describe["text"] = "Describe"
+		self.describe = Button(self.master, padx=3, pady=3, width=100, image=self.ides)
+		# self.describe["text"] = "Describe"
 		self.describe["command"] =  self.describeSession
-		self.describe.grid(row=1, column=3, padx=2, pady=2)
+		self.describe.grid(row=1, column=3, padx=2, pady=2, sticky=W+E+N+S)
 
-		self.describe = Button(self.master, width=13, padx=3, pady=3)
-		self.describe["text"] = "Backward"
+		self.describe = Button(self.master, padx=3, pady=3, width=100, image=self.iback)
+		# self.describe["text"] = "Backward"
 		self.describe["command"] =  self.backWardSession
-		self.describe.grid(row=1, column=4, padx=2, pady=2)
+		self.describe.grid(row=1, column=4, padx=2, pady=2, sticky=W+E+N+S)
 
-		self.describe = Button(self.master, width=13, padx=3, pady=3)
-		self.describe["text"] = "Forward"
+		self.describe = Button(self.master, padx=3, pady=3, width=100, image=self.ifor)
+		# self.describe["text"] = "Forward"
 		self.describe["command"] =  self.forwardSession
-		self.describe.grid(row=1, column=5, padx=2, pady=2)
+		self.describe.grid(row=1, column=5, padx=2, pady=2, sticky=W+E+N+S)
 		
 		# Create a label to display the movie
 		self.label = Label(self.master, height=19)
-		self.label.grid(row=0, column=0, columnspan=4, sticky=W+E+N+S, padx=5, pady=5) 
+		self.label.grid(row=0, column=0, columnspan=6, sticky=W+E+N+S, padx=5, pady=5)
 		self.displays = []
 		for i in range(6):
 			DLabel = Label(self.master, height=1)
-			DLabel.grid(row=2 + i, column=0, columnspan=4,sticky=W,padx=5, pady=5) 
+			DLabel.grid(row=2 + i, column=0, columnspan=6,sticky=W,padx=5, pady=5)
 			self.displays.append(DLabel)
 	
 	def setupMovie(self):
@@ -109,6 +117,7 @@ class Client:
 		self.master.destroy() # Close the gui window
 		try:
 			os.remove(CACHE_FILE_NAME + str(self.sessionId) + CACHE_FILE_EXT) # Delete the cache image from video
+
 		except:
 			print("Can't delete cache.")
 
@@ -296,7 +305,7 @@ class Client:
 			
 			if reply: #RTSPSOCKET keep adding the new data
 				self.parseRtspReply(reply.decode("utf-8"))
-			
+
 			# Close the RTSP socket upon requesting Teardown
 			if self.requestSent == self.TEARDOWN:
 				self.rtspSocket.shutdown(socket.SHUT_RDWR)
